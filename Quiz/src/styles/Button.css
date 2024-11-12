@@ -1,0 +1,17 @@
+.quiz-button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  background-color: #ff0055;
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 20px 35px;  
+  font-size: 1.2em;
+  cursor: pointer;
+  border-radius: 50px;
+  transition: background-color 0.3s ease, padding 0.3s ease;  
+}
+
+.quiz-button:hover {
+  background-color: #ff3c7d;
+  padding: 20px 40px; 
+}
