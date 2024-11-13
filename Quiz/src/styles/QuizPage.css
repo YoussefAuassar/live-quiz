@@ -1,0 +1,100 @@
+/* General styles for the quiz page */
+.quiz-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh; /* Take full viewport height */
+    background-color: transparent; /* No background */
+    color: #fff;
+    padding: 20px;
+  }
+  
+  .quiz-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .quiz-total {
+    font-size: 1.2em;
+    margin-top: 10px;
+  }
+  
+  /* Quiz content section */
+  .quiz-content {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .quiz-info {
+    margin-bottom: 20px;
+  }
+  
+  .quiz-score {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .quiz-sound-icon {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+  
+  .quiz-timer {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+  
+  .quiz-timer span {
+    font-weight: bold;
+    color: #ffcc00; /* Timer color */
+  }
+  
+  h1 {
+    font-size: 3em;
+    margin: 20px 0;
+  }
+  
+  .quiz-prompt {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  
+  .quiz-posters {
+    display: flex;
+    justify-content: center; /* Center the posters */
+    gap: 30px; /* Adds space between each poster */
+    margin-bottom: 30px;
+  }
+  
+  .poster {
+    width: 150px;
+    height: 225px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .poster:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Skip button at the bottom */
+  .quiz-skip-button {
+    background-color: #dd1c1c;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .quiz-skip-button:hover {
+    background-color: #dd4747;
+  }
+  
