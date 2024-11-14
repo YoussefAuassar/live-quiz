@@ -4,12 +4,11 @@ import "../styles/QuizPage.css";
 function QuizPage() {
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(1);
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(20);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
 
-  const audioRef = useRef(null); // Reference to the audio element
+  const audioRef = useRef(null); 
 
-  // Example soundtracks
   const soundtracks = [
     { id: 1, src: "/assets/harry.mp3", answer: "harry" },
     { id: 2, src: "/assets/hobbit.mp3", answer: "hobbit" },
@@ -17,17 +16,15 @@ function QuizPage() {
   ];
 
   useEffect(() => {
-    // Play the audio automatically when the component mounts or the question changes
     if (audioRef.current) {
       audioRef.current.play().catch((error) => {
         console.error("Playback error:", error);
       });
     }
 
-    // Timer countdown
     const countdown = setInterval(() => {
       if (timer > 0) {
-        setTimer(timer - 1);
+        setTimer((prev) => prev - 1);
       }
     }, 1000);
 
@@ -41,8 +38,7 @@ function QuizPage() {
     }
     if (currentQuestion < soundtracks.length) {
       setCurrentQuestion(currentQuestion + 1);
-      setTimer(30);
-      // Pause and reset the audio
+      setTimer(20);
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     } else {
@@ -53,21 +49,20 @@ function QuizPage() {
   return (
     <div className="quiz-page">
       <header className="quiz-header">
-        <p className="quiz-total">{currentQuestion} of {soundtracks.length} Questions</p>
+        <p className="quiz-total">
+          <span className="current-question">{currentQuestion}</span>/<span className="total-questions">{soundtracks.length}</span>
+        </p>
+        <p className="quiz-score">Score: <br /> {score}</p>
       </header>
 
       <div className="quiz-content">
-        <div className="quiz-info">
-          <p className="quiz-score">Score: {score}</p>
-          <div className="quiz-timer">
-            <span>{timer.toString().padStart(2, "0")}:00</span>
-          </div>
+        <div className="quiz-timer">
+          <div className="timer-bar" style={{ width: `${(timer / 20) * 100}%` }}></div>
         </div>
 
         <h1>Which movie is it?</h1>
         <p className="quiz-prompt">Click on the poster to answer!</p>
 
-        {/* Audio Element for the soundtrack */}
         <audio ref={audioRef} src={soundtracks[currentQuestion - 1].src} style={{ display: 'none' }} />
 
         <div className="quiz-posters">
