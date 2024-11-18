@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link
+import { Link } from "react-router-dom"; 
 import "../styles/HomePage.css";
 
 function HomePage() {
@@ -13,7 +13,7 @@ function HomePage() {
         Guess the movie by the music! Try to<br /> 
         identify the movie by the music
       </p>
-      {/* Using Link component to navigate */}
+   
       <Link to="/quiz">
         <button className="quiz-button">
           Take the Quiz
