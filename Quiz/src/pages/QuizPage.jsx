@@ -2,25 +2,24 @@ import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import "../styles/QuizPage.css";
 import quizData from "../components/quizData";
+import ExplosionEffect from "../components/ExplosionEffect";
 
 function QuizPage() {
-  // State variabelen voor score, huidige vraag, timer, geselecteerd antwoord, en animatie toestand
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [timer, setTimer] = useState(20);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showCorrectAnswerAnimation, setShowCorrectAnswerAnimation] = useState(false);
   const [showWrongAnswerAnimation, setShowWrongAnswerAnimation] = useState(false);
-  
- 
+  const [triggerExplosion, setTriggerExplosion] = useState(false);
+  const [quizEnded, setQuizEnded] = useState(false);
+
   const audioRef = useRef(null);
-  const correctAnimationRef = useRef(null); 
+  const correctAnimationRef = useRef(null);
   const wrongAnimationRef = useRef(null);
 
-  // Effect om animaties uit te voeren bij correct of fout antwoord
   useEffect(() => {
     if (showCorrectAnswerAnimation && correctAnimationRef.current) {
-      // Animatie voor een correct antwoord
       gsap.fromTo(
         correctAnimationRef.current,
         { opacity: 0, scale: 0.5, y: -50 },
@@ -32,10 +31,10 @@ function QuizPage() {
         delay: 1.5,
         onComplete: () => setShowCorrectAnswerAnimation(false),
       });
+      setTriggerExplosion(true);
     }
 
     if (showWrongAnswerAnimation && wrongAnimationRef.current) {
-     
       gsap.fromTo(
         wrongAnimationRef.current,
         { opacity: 0, scale: 1.5, y: 50 },
@@ -50,7 +49,6 @@ function QuizPage() {
     }
   }, [showCorrectAnswerAnimation, showWrongAnswerAnimation]);
 
-  // Effect om de timer te starten en het geluid af te spelen bij elke nieuwe vraag
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.play().catch((error) => {
@@ -58,42 +56,61 @@ function QuizPage() {
       });
     }
 
-    // Timer countdown voor elke vraag
     const countdown = setInterval(() => {
-      if (timer > 0) {
+      if (timer > 0 && !quizEnded) {
         setTimer((prev) => prev - 1);
       }
     }, 1000);
 
-    return () => clearInterval(countdown); // Opruimen van de timer bij het verlaten van de component
-  }, [currentQuestion, timer]);
-
-
-  const handleAnswer = (answer) => {
-    setSelectedAnswer(answer);
-    const correctAnswer = quizData[currentQuestion - 1].answer;
-    
-   
-    if (answer === correctAnswer) {
-      setScore(score + 1);
-      setShowCorrectAnswerAnimation(true);
-    } else {
-     
-      setShowWrongAnswerAnimation(true);
+    if (timer === 0) {
+      handleAnswer(null);
     }
 
-    // Na een korte pauze, ga naar de volgende vraag of eindig het quizspel
+    return () => clearInterval(countdown);
+  }, [currentQuestion, timer, quizEnded]);
+
+  const handleAnswer = (answer) => {
+    if (answer !== null) {
+      setSelectedAnswer(answer);
+      const correctAnswer = quizData[currentQuestion - 1].answer;
+
+      if (answer === correctAnswer) {
+        setScore(score + 1);
+        setShowCorrectAnswerAnimation(true);
+      } else {
+        setShowWrongAnswerAnimation(true);
+      }
+    }
+
     if (currentQuestion < quizData.length) {
       setTimeout(() => {
         setCurrentQuestion(currentQuestion + 1);
-        setTimer(20); 
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+        setTimer(20);
+        setSelectedAnswer(null);
+        setShowCorrectAnswerAnimation(false);
+        setShowWrongAnswerAnimation(false);
+        setTriggerExplosion(false);
       }, 2000);
     } else {
+      setQuizEnded(true);
       setTimeout(() => {
         alert("Quiz finished! Your score: " + score);
       }, 2000);
+    }
+  };
+
+  const handleSkip = () => {
+    setSelectedAnswer(null);
+    setShowCorrectAnswerAnimation(false);
+    setShowWrongAnswerAnimation(false);
+    setTriggerExplosion(false);
+  
+    if (currentQuestion < quizData.length) {
+      setCurrentQuestion(currentQuestion + 1);
+      setTimer(20);
+    } else {
+      setQuizEnded(true);
+      setTimeout(() => alert("Quiz finished! Your score: " + score), 500);
     }
   };
 
@@ -145,15 +162,17 @@ function QuizPage() {
               src={poster.src}
               alt={poster.alt}
               className="poster"
-              onClick={() => handleAnswer(poster.value)} // Klikken op poster om antwoord te geven
+              onClick={() => handleAnswer(poster.value)}
             />
           ))}
         </div>
 
-        <button className="quiz-skip-button" onClick={() => handleAnswer(null)}>
+        <button className="quiz-skip-button" onClick={handleSkip}>
           Skip
         </button>
       </div>
+
+      <ExplosionEffect trigger={triggerExplosion} />
     </div>
   );
 }

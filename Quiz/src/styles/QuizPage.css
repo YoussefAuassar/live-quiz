@@ -1,12 +1,13 @@
 .quiz-page {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: #121212;
   color: #fff;
   padding: 20px;
   box-sizing: border-box;
+  position: relative;
 }
 
 .quiz-content {
@@ -22,7 +23,6 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  
   position: absolute;
   top: 40px;
   left: 60px;
@@ -39,13 +39,13 @@
 }
 
 .total-questions {
-  color: #fff; /
+  color: #fff;
 }
 
 .quiz-score {
   font-size: 1.6em;
   color: #fff;
-  margin-top: 200px; 
+  margin-top: 200px;
   line-height: 2;
   text-align: center;
 }
@@ -139,3 +139,4 @@ h1 {
   font-size: 24px;
   z-index: 1000;
 }
+
