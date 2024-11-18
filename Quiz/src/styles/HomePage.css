@@ -10,7 +10,6 @@ body {
 
 .homepage {
 	position: relative;
-	/* background-image: url("/src/assets/background-image.png"); */
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -24,14 +23,14 @@ body {
 	overflow: hidden;
 }
 
-h1 {
-	font-size: 5em;
+h2 {
+	font-size: 5rem;
 	margin: 20px 0;
 	line-height: 1.2;
 }
 
 p {
-	font-size: 1.1em;
+	font-size: 1.3em;
 	margin: 20px 0;
 }
 

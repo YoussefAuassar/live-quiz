@@ -4,6 +4,7 @@ import "../styles/QuizPage.css";
 import quizData from "../components/quizData";
 
 function QuizPage() {
+  // State variabelen voor score, huidige vraag, timer, geselecteerd antwoord, en animatie toestand
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [timer, setTimer] = useState(20);
@@ -11,12 +12,15 @@ function QuizPage() {
   const [showCorrectAnswerAnimation, setShowCorrectAnswerAnimation] = useState(false);
   const [showWrongAnswerAnimation, setShowWrongAnswerAnimation] = useState(false);
   
+  // Referenties voor het geluid en de animatie
   const audioRef = useRef(null);
-  const correctAnimationRef = useRef(null); // Ref voor juiste antwoord
-  const wrongAnimationRef = useRef(null); // Ref voor verkeerde antwoord
+  const correctAnimationRef = useRef(null); 
+  const wrongAnimationRef = useRef(null);
 
+  // Effect om animaties uit te voeren bij correct of fout antwoord
   useEffect(() => {
     if (showCorrectAnswerAnimation && correctAnimationRef.current) {
+      // Animatie voor een correct antwoord
       gsap.fromTo(
         correctAnimationRef.current,
         { opacity: 0, scale: 0.5, y: -50 },
@@ -31,6 +35,7 @@ function QuizPage() {
     }
 
     if (showWrongAnswerAnimation && wrongAnimationRef.current) {
+      // Animatie voor een fout antwoord
       gsap.fromTo(
         wrongAnimationRef.current,
         { opacity: 0, scale: 1.5, y: 50 },
@@ -45,6 +50,7 @@ function QuizPage() {
     }
   }, [showCorrectAnswerAnimation, showWrongAnswerAnimation]);
 
+  // Effect om de timer te starten en het geluid af te spelen bij elke nieuwe vraag
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.play().catch((error) => {
@@ -52,28 +58,35 @@ function QuizPage() {
       });
     }
 
+    // Timer countdown voor elke vraag
     const countdown = setInterval(() => {
       if (timer > 0) {
         setTimer((prev) => prev - 1);
       }
     }, 1000);
 
-    return () => clearInterval(countdown);
+    return () => clearInterval(countdown); // Opruimen van de timer bij het verlaten van de component
   }, [currentQuestion, timer]);
 
+  // Functie om een antwoord te verwerken
   const handleAnswer = (answer) => {
     setSelectedAnswer(answer);
-    if (answer === quizData[currentQuestion - 1].answer) {
+    const correctAnswer = quizData[currentQuestion - 1].answer;
+    
+    // Als het antwoord correct is, verhoog de score en toon de animatie
+    if (answer === correctAnswer) {
       setScore(score + 1);
       setShowCorrectAnswerAnimation(true);
     } else {
+      // Als het antwoord fout is, toon de fout animatie
       setShowWrongAnswerAnimation(true);
     }
 
+    // Na een korte pauze, ga naar de volgende vraag of eindig het quizspel
     if (currentQuestion < quizData.length) {
       setTimeout(() => {
         setCurrentQuestion(currentQuestion + 1);
-        setTimer(20);
+        setTimer(20);  // Reset de timer voor de volgende vraag
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
       }, 2000);
@@ -132,7 +145,7 @@ function QuizPage() {
               src={poster.src}
               alt={poster.alt}
               className="poster"
-              onClick={() => handleAnswer(poster.value)}
+              onClick={() => handleAnswer(poster.value)} // Klikken op poster om antwoord te geven
             />
           ))}
         </div>

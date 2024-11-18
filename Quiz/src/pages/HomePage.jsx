@@ -6,9 +6,9 @@ function HomePage() {
   return (
     <div className="homepage">
       <div className="overlay"></div>
-      <h1>
+      <h2>
         Movie Music <br /> Quiz.
-      </h1>
+      </h2>
       <p>
         Guess the movie by the music! Try to<br /> 
         identify the movie by the music
